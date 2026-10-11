@@ -1,0 +1,88 @@
+erDiagram
+    USERS ||--o{ RENTALS : creates
+    USERS ||--o{ PAYMENTS : receives
+    USERS ||--o{ MAINTENANCE_LOGS : records
+    CUSTOMERS ||--o{ RENTALS : rents
+    CATEGORIES ||--o{ EQUIPMENT : groups
+    EQUIPMENT ||--o{ EQUIPMENT_SUPPLIERS : sourced_from
+    SUPPLIERS ||--o{ EQUIPMENT_SUPPLIERS : provides
+    EQUIPMENT ||--|{ EQUIPMENT_UNITS : has
+    RENTALS ||--|{ RENTAL_ITEMS : contains
+    EQUIPMENT_UNITS ||--o{ RENTAL_ITEMS : assigned_to
+    RENTALS ||--o{ PAYMENTS : paid_by
+    EQUIPMENT_UNITS ||--o{ MAINTENANCE_LOGS : serviced
+
+    USERS {
+      bigint id PK
+      varchar username UK
+      varchar password_hash
+      enum role
+    }
+    CUSTOMERS {
+      bigint id PK
+      varchar name
+      varchar phone
+      varchar identity_number
+    }
+    CATEGORIES {
+      bigint id PK
+      varchar name UK
+    }
+    EQUIPMENT {
+      bigint id PK
+      bigint category_id FK
+      varchar sku UK
+      varchar brand
+      varchar model
+      decimal daily_rate
+      decimal deposit_amount
+    }
+    EQUIPMENT_UNITS {
+      bigint id PK
+      bigint equipment_id FK
+      varchar serial_number UK
+      enum status
+    }
+    SUPPLIERS {
+      bigint id PK
+      varchar name
+      varchar phone
+    }
+    EQUIPMENT_SUPPLIERS {
+      bigint equipment_id PK, FK
+      bigint supplier_id PK, FK
+      decimal supplier_price
+    }
+    RENTALS {
+      bigint id PK
+      varchar rental_code UK
+      bigint customer_id FK
+      bigint created_by FK
+      datetime start_at
+      datetime due_at
+      enum status
+    }
+    RENTAL_ITEMS {
+      bigint id PK
+      bigint rental_id FK
+      bigint equipment_unit_id FK
+      decimal daily_rate
+      int rental_days
+      decimal line_total
+    }
+    PAYMENTS {
+      bigint id PK
+      bigint rental_id FK
+      bigint received_by FK
+      enum payment_type
+      decimal amount
+      enum method
+    }
+    MAINTENANCE_LOGS {
+      bigint id PK
+      bigint equipment_unit_id FK
+      bigint recorded_by FK
+      decimal cost
+      datetime started_at
+      datetime completed_at
+    }

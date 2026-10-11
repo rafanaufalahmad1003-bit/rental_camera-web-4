@@ -1,0 +1,6 @@
+.env
+.env.*
+*.log
+*.sql.gz
+database/*.sqlite
+docs/screenshots/*.tmp
